@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.eggs/
+dist/
+build/
+wheels/
+*.egg-info/
+
+# PyInstaller
+#  Usually these files are written by a python script; excluding them prevents
+#  accidental submission of broken builds.
+build/
+dist/
+*.manifest
+*.spec
+
+# Translations
+*.mo
+
+# Environments
+.venv
+venv/
+ENV/
+env.bak/
+env/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Others
+*.swp
+*.bak
+
+*.txt
