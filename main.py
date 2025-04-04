@@ -1,28 +1,99 @@
-# main.py
-from pywaifu.godot import GodotConnector
+# main.py (Example Usage Script)
+import time
+from pywaifu.godot import GodotConnector, GodotError
 from pywaifu.character import Character
-#from pywaifu.vrm import VRMCharacter
+from pywaifu.vrm import VRMCharacter # Keep for VRM example option
+from pywaifu.llm import LLMError
+
+# --- Configuration ---
+# IMPORTANT: Replace with the actual path to your Godot project directory
+GODOT_PROJECT_PATH = "path/to/your/godot_project"
+# Define character details
+CHARACTER_NAME = "Aiko"
+CHARACTER_PERSONALITY = "Energetic, optimistic, and loves discussing video games."
+# Optional: Specify a different Hugging Face model (e.g., "gpt2")
+# Set to None to use the default "distilgpt2"
+MODEL_NAME = None
+# Optional: Set path for VRM model if using VRMCharacter
+VRM_NODE_PATH = "/root/Scene/YourVRMNode" # Adjust as needed in your Godot scene
+USE_VRM = False # Set to True to use the VRMCharacter example
 
 def main():
-    connector = GodotConnector("path/to/your/godot_project") #Replace
-    connector.connect()
-
-    yui = Character(
-        name="Yui",
-        personality="Kind, helpful, and a little clumsy.",
-        godot_connector=connector
-    )
-    #OR, for VRM
-    #yui = VRMCharacter(name="Yui", personality="Kind and helpful.", godot_connector=connector, vrm_node_path="/root/Scene/Yui")
-
-    # Keep the script running (if not using godot-rl)
+    connector = None # Initialize connector to None for finally block
     try:
+        print("Initializing Godot Connector...")
+        # Assuming Godot is already running and listening, or godot-rl will launch it
+        connector = GodotConnector(GODOT_PROJECT_PATH)
+        connector.connect()
+        print("Connector ready.")
+
+        print(f"Creating character: {CHARACTER_NAME}...")
+        if USE_VRM:
+            waifu = VRMCharacter(
+                name=CHARACTER_NAME,
+                personality=CHARACTER_PERSONALITY,
+                model_name=MODEL_NAME,
+                godot_connector=connector,
+                vrm_node_path=VRM_NODE_PATH
+            )
+            print("VRM Character created.")
+        else:
+            waifu = Character(
+                name=CHARACTER_NAME,
+                personality=CHARACTER_PERSONALITY,
+                model_name=MODEL_NAME,
+                godot_connector=connector
+            )
+            print("Standard Character created.")
+
+        print(f"\n--- Starting interaction with {waifu.name} ---")
+        print("Type 'quit' or 'exit' to end the conversation.")
+
         while True:
-            pass
+            user_input = input("You: ")
+            if user_input.lower() in ["quit", "exit"]:
+                break
+
+            print(f"{waifu.name}: ...thinking...")
+            try:
+                response = waifu.talk(user_input)
+                print(f"{waifu.name}: {response}")
+
+                # Example VRM action based on response (simple keyword check)
+                if USE_VRM and "game" in response.lower():
+                     print(f"[{waifu.name} performs 'excited' animation]")
+                     waifu.play_animation("Excited") # Assuming 'Excited' animation exists
+                     waifu.set_expression("Joy", 0.7) # Assuming 'Joy' blendshape exists
+                elif USE_VRM:
+                     # Default idle animation/expression
+                     waifu.play_animation("Idle")
+                     waifu.set_expression("Neutral", 1.0)
+
+
+            except LLMError as e:
+                print(f"LLM Error: {e}")
+            except GodotError as e:
+                print(f"Godot Connection Error: {e}")
+                print("Exiting due to connection error.")
+                break
+            except Exception as e:
+                 print(f"An unexpected error occurred during talk: {e}")
+
+
+    except GodotError as e:
+        print(f"Failed to connect to Godot: {e}")
+    except LLMError as e:
+        print(f"Failed to initialize LLM: {e}")
+
     except KeyboardInterrupt:
-        print("Exiting...")
+        print("\nUser interrupted. Exiting...")
+    except Exception as e:
+        print(f"\nAn unexpected error occurred: {e}")
     finally:
-        connector.disconnect()
+        if connector:
+            print("Disconnecting from Godot...")
+            connector.disconnect()
+        print("Cleanup complete. Goodbye!")
 
 if __name__ == "__main__":
     main()
