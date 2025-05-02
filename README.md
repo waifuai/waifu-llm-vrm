@@ -4,7 +4,7 @@ A Python library for creating AI waifus in Godot, powered by the Google Gemini A
 
 ## Features
 
-*   **AI Conversation:** Uses the Google Generative AI API (specifically `gemini-2.5-flash-preview-04-17`) for natural language generation. Requires a Google Gemini API key.
+*   **AI Conversation:** Uses the Google Generative AI API (specifically `gemini-2.5-pro-preview-03-25`) for natural language generation. Requires a Google Gemini API key.
 *   **Godot Integration:** Connects to a running Godot instance for communication (using `godot-rl` if available, otherwise sockets).
 *   **Character Representation:** `Character` class manages personality, state, and interaction logic, including initializing the Gemini chat session.
 *   **VRM Support (Optional):** `VRMCharacter` subclass adds methods for controlling VRM animations and expressions via Godot.
@@ -80,7 +80,7 @@ def main():
 
         print(f"Creating character: {CHARACTER_NAME}...")
         # The Character class now automatically uses the Gemini API key
-        # loaded from ~/.api-gemini and the 'gemini-2.5-flash-preview-04-17' model.
+        # loaded from ~/.api-gemini and the 'gemini-2.5-pro-preview-03-25' model.
         if USE_VRM:
             # Import VRMCharacter if needed
             from pywaifu.vrm import VRMCharacter

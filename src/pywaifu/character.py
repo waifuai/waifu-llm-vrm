@@ -15,7 +15,7 @@ class Character:
     Represents an AI-powered character using Google Gemini.
     """
     # Define the model name to use
-    GEMINI_MODEL_NAME = 'gemini-2.5-flash-preview-04-17'
+    GEMINI_MODEL_NAME = 'gemini-2.5-pro-preview-03-25'
 
     def __init__(self, name: str, personality: str, godot_connector: GodotConnector = None):
         """
