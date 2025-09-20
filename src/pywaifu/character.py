@@ -100,12 +100,12 @@ class Character:
 
             # Check for blocked content before accessing text
             if not response.candidates:
-                 # If no candidates, likely blocked. Check prompt_feedback
-                 block_reason = response.prompt_feedback.block_reason.name if response.prompt_feedback else "Unknown"
-                 print(f"Warning: Gemini response potentially blocked. Reason: {block_reason}")
-                 # Provide a generic response or raise an error
-                 # return f"({self.name} seems hesitant to respond to that.)"
-                 raise LLMError(f"Gemini response blocked. Reason: {block_reason}")
+                # If no candidates, likely blocked. Check prompt_feedback
+                block_reason = response.prompt_feedback.block_reason.name if response.prompt_feedback else "Unknown"
+                print(f"Warning: Gemini response potentially blocked. Reason: {block_reason}")
+                # Provide a generic response or raise an error
+                # return f"({self.name} seems hesitant to respond to that.)"
+                raise LLMError(f"Gemini response blocked. Reason: {block_reason}")
 
             # Extract the text from the first candidate
             # Accessing parts directly as response.text might raise an error if blocked
@@ -124,8 +124,8 @@ class Character:
             try:
                 self.godot_connector.rpc(action, *args)
             except GodotError as e:
-                 print(f"Warning: Failed to send action '{action}' to Godot: {e}")
-                 # Decide if this should be a critical error or just a warning
+                print(f"Warning: Failed to send action '{action}' to Godot: {e}")
+                # Decide if this should be a critical error or just a warning
 
     def update_state(self, state_updates: dict) -> None:
         """Updates the character's state."""
@@ -157,9 +157,9 @@ class Character:
                         print(f"LLM Error handling player input: {e}")
                         # Optionally send an error message back to Godot
                         if self.godot_connector:
-                             self.godot_connector.rpc("character_error", self.name, str(e))
+                            self.godot_connector.rpc("character_error", self.name, str(e))
                     except GodotError as e:
-                         print(f"Godot Error sending response back: {e}")
+                        print(f"Godot Error sending response back: {e}")
                 else:
                     print("Received player_input event with no text.")
 

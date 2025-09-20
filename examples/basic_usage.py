@@ -1,17 +1,35 @@
 # examples/basic_usage.py
+"""
+Basic usage example for pywaifu.
+
+This script demonstrates how to create an AI character and have a conversation with it.
+The character can be connected to a Godot project for visualization.
+
+Usage:
+    1. Set up your Google Gemini API key in ~/.api-gemini
+    2. Update GODOT_PROJECT_PATH to point to your Godot project directory
+    3. Run: python examples/basic_usage.py
+"""
+
 import time
 from pywaifu.godot import GodotConnector, GodotError
-from pywaifu.character import Character, LLMError # Import LLMError from character module now
-# from pywaifu.vrm import VRMCharacter # Uncomment if using VRM
+from pywaifu.character import Character, LLMError
+# from pywaifu.vrm import VRMCharacter  # Uncomment if using VRM
 
 # --- Configuration ---
 # IMPORTANT: Replace with the actual path to your Godot project directory
 GODOT_PROJECT_PATH = "path/to/your/godot_project"
+
+# Character configuration
 CHARACTER_NAME = "Yui"
-CHARACTER_PERSONALITY = "Kind, helpful, and intelligent. Enjoys talking about technology."
+CHARACTER_PERSONALITY = (
+    "Kind, helpful, and intelligent. Enjoys talking about technology. "
+    "Has a cheerful personality and loves making friends."
+)
+
 # VRM configuration (only needed if USE_VRM is True)
-VRM_NODE_PATH = "/root/Scene/YourVRMNode" # IMPORTANT: Set this path in Godot scene if using VRM
-USE_VRM = False # Set to True to use the VRMCharacter example
+VRM_NODE_PATH = "/root/Scene/YourVRMNode"  # IMPORTANT: Set this path in Godot scene if using VRM
+USE_VRM = False  # Set to True to use the VRMCharacter example
 
 def main():
     connector = None # Initialize connector to None for finally block
@@ -66,13 +84,13 @@ def main():
                 if USE_VRM and isinstance(waifu, VRMCharacter):
                     # Add VRM-specific actions based on response or state
                     if "wave" in user_input.lower():
-                         print(f"[{waifu.name} waves]")
-                         waifu.play_animation("Wave") # Assuming 'Wave' animation exists
-                         waifu.set_expression("Happy", 0.8) # Assuming 'Happy' blendshape exists
+                        print(f"[{waifu.name} waves]")
+                        waifu.play_animation("Wave")  # Assuming 'Wave' animation exists
+                        waifu.set_expression("Happy", 0.8)  # Assuming 'Happy' blendshape exists
                     else:
-                         # Default idle animation/expression
-                         waifu.play_animation("Idle")
-                         waifu.set_expression("Neutral", 1.0)
+                        # Default idle animation/expression
+                        waifu.play_animation("Idle")
+                        waifu.set_expression("Neutral", 1.0)
 
             except LLMError as e:
                 print(f"LLM Error: {e}")
@@ -83,9 +101,9 @@ def main():
                 print("Exiting due to connection error.")
                 break
             except Exception as e:
-                 print(f"An unexpected error occurred during talk: {e}")
-                 # Optionally break the loop on unexpected errors
-                 # break
+                print(f"An unexpected error occurred during talk: {e}")
+                # Optionally break the loop on unexpected errors
+                # break
 
     except GodotError as e:
         print(f"Failed to connect to Godot: {e}")

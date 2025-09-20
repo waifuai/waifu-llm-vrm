@@ -153,6 +153,65 @@ class TestCharacter(unittest.TestCase):
         self.character.update_state(more_updates)
         self.assertEqual(self.character.state, expected_state)
 
+    def test_talk_with_empty_input(self, mock_load_key, mock_configure, mock_genai_model):
+        """Test that talk method handles empty input gracefully."""
+        expected_response = "I'm here to help!"
+        self.mock_chat_session.send_message.return_value = MockGeminiResponse(text=expected_response)
+
+        response = self.character.talk("")
+        self.assertEqual(response, expected_response)
+        self.mock_chat_session.send_message.assert_called_once_with("")
+
+    def test_talk_with_long_input(self, mock_load_key, mock_configure, mock_genai_model):
+        """Test that talk method handles long input."""
+        long_input = "a" * 1000
+        expected_response = "That's a lot of a's!"
+        self.mock_chat_session.send_message.return_value = MockGeminiResponse(text=expected_response)
+
+        response = self.character.talk(long_input)
+        self.assertEqual(response, expected_response)
+        self.mock_chat_session.send_message.assert_called_once_with(long_input)
+
+    def test_perform_action_without_godot_connector(self, mock_load_key, mock_configure, mock_genai_model):
+        """Test that perform_action handles missing Godot connector gracefully."""
+        # Create character without Godot connector
+        character_no_godot = Character(name="TestBot", personality="Test personality")
+
+        # Should not raise an exception
+        character_no_godot.perform_action("test_action", "arg1", "arg2")
+
+    def test_perform_action_with_godot_error(self, mock_load_key, mock_configure, mock_genai_model):
+        """Test that perform_action handles Godot errors gracefully."""
+        from pywaifu.godot import GodotError
+        self.mock_godot_connector.rpc.side_effect = GodotError("Connection failed")
+
+        # Should not raise an exception, just print warning
+        self.character.perform_action("test_action", "arg1", "arg2")
+        self.mock_godot_connector.rpc.assert_called_once_with("test_action", "arg1", "arg2")
+
+    def test_talk_preserves_conversation_context(self, mock_load_key, mock_configure, mock_genai_model):
+        """Test that multiple talk calls maintain conversation context."""
+        responses = ["Hello!", "How are you?", "Nice to meet you!"]
+
+        for i, expected_response in enumerate(responses):
+            self.mock_chat_session.send_message.return_value = MockGeminiResponse(text=expected_response)
+            response = self.character.talk(f"Message {i+1}")
+            self.assertEqual(response, expected_response)
+
+        self.assertEqual(self.mock_chat_session.send_message.call_count, 3)
+
+    def test_character_initialization_with_empty_name(self, mock_load_key, mock_configure, mock_genai_model):
+        """Test character initialization with edge case inputs."""
+        # Test with empty personality
+        character = Character(name="Test", personality="")
+        self.assertEqual(character.name, "Test")
+        self.assertEqual(character.personality, "")
+
+        # Test with very long name
+        long_name = "a" * 100
+        character_long_name = Character(name=long_name, personality="Test")
+        self.assertEqual(character_long_name.name, long_name)
+
     # test_get_system_prompt_contains_details is removed as _get_system_prompt no longer exists
 
 if __name__ == '__main__':
