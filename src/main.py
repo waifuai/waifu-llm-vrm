@@ -1,4 +1,23 @@
-# main.py (in the project root)
+"""
+Project root main script for pywaifu.
+
+This script serves as the main entry point for the pywaifu library when run from the project root.
+It demonstrates basic character creation and connection to Godot without VRM functionality.
+
+The script provides:
+- Basic character creation with personality
+- Simple connection to Godot project
+- Basic conversational interface
+- Error handling and cleanup
+
+Usage:
+    1. Set up your Google Gemini API key in ~/.api-gemini
+    2. Update the Godot project path to point to your actual Godot project directory
+    3. Run: python src/main.py
+
+Note: This is a simple example script. For more advanced features,
+see the examples in the examples/ directory.
+"""
 from pywaifu.godot import GodotConnector
 from pywaifu.character import Character
 # from pywaifu.vrm import VRMCharacter  # Use if you're using VRMCharacter

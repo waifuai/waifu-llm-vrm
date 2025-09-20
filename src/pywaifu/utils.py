@@ -1,4 +1,20 @@
-# src/pywaifu/utils.py
+"""
+Utility functions for pywaifu.
+
+This module provides utility functions and custom exceptions used throughout the pywaifu library.
+It includes API key management, data serialization, and custom error handling.
+
+Functions:
+    load_gemini_api_key(): Loads the Google Gemini API key from the user's home directory
+    serialize_data(data): Converts dictionary data to JSON string
+    deserialize_data(data_str): Converts JSON string back to dictionary
+
+Exceptions:
+    ApiKeyNotFoundError: Raised when the Google Gemini API key file is missing or invalid
+
+The API key should be stored in ~/.api-gemini file in the user's home directory.
+This file should contain only the API key without any additional formatting.
+"""
 import os
 import json # Keep json for existing serialize/deserialize functions
 

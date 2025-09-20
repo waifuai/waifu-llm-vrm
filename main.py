@@ -1,4 +1,30 @@
-# main.py (Example Usage Script)
+"""
+Example usage script for pywaifu.
+
+This script demonstrates how to create an AI character with both standard and VRM functionality.
+It shows basic character creation, conversation handling, and VRM animation control.
+
+The script includes:
+- Character creation with personality traits
+- Interactive conversation loop
+- VRM animation and expression control
+- Error handling for both LLM and Godot connections
+- Graceful cleanup on exit
+
+Usage:
+    1. Set up your Google Gemini API key in ~/.api-gemini
+    2. Update GODOT_PROJECT_PATH to point to your Godot project directory
+    3. Set USE_VRM to True if you want to use VRM features
+    4. Run: python main.py
+
+Configuration:
+    - GODOT_PROJECT_PATH: Path to your Godot project directory
+    - CHARACTER_NAME: Name of the AI character
+    - CHARACTER_PERSONALITY: Personality description for the character
+    - MODEL_NAME: Optional Hugging Face model name (set to None for default)
+    - VRM_NODE_PATH: Node path for VRM model in Godot scene
+    - USE_VRM: Set to True to enable VRM functionality
+"""
 import time
 from pywaifu.godot import GodotConnector, GodotError
 from pywaifu.character import Character

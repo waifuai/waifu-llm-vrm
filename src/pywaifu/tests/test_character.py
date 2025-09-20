@@ -1,4 +1,22 @@
-# tests/test_character.py
+"""
+Unit tests for the Character class in pywaifu.
+
+This test suite provides comprehensive testing for the Character class functionality,
+including initialization, conversation handling, error management, and integration
+with Godot connector.
+
+Test coverage includes:
+- Character initialization with various parameters
+- Gemini API integration and configuration
+- Conversation handling and response generation
+- Error handling for LLM and Godot connection issues
+- State management and updates
+- Callback registration and handling
+- Edge cases and error conditions
+
+The tests use mocked dependencies to avoid requiring actual API keys or Godot connections,
+ensuring they can run in any environment without external dependencies.
+"""
 import unittest
 from unittest.mock import MagicMock, patch, ANY
 # Import Character and the custom errors

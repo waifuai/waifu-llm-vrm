@@ -1,4 +1,22 @@
-# tests/test_vrm.py
+"""
+Unit tests for the VRMCharacter class in pywaifu.
+
+This test suite provides comprehensive testing for the VRMCharacter class functionality,
+including VRM model integration, animation control, expression management, and
+integration with the Godot game engine.
+
+Test coverage includes:
+- VRMCharacter initialization and inheritance from Character
+- Animation playback functionality
+- Expression/blend shape control
+- Integration with GodotConnector for RPC calls
+- Error handling for Godot connection issues
+- Fallback behavior when Godot connector is not available
+- Edge cases with extreme values and missing configurations
+
+The tests use mocked dependencies to avoid requiring actual VRM models or Godot connections,
+ensuring they can run in any environment without external dependencies.
+"""
 import unittest
 from unittest.mock import MagicMock, patch, ANY
 from pywaifu.vrm import VRMCharacter
